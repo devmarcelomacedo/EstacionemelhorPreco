@@ -1,345 +1,286 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestão de Estacionamento</title>
+    <title>Melhor De Estacionar</title>
     <link rel="icon" type="image/png" href="img/favicon.png">
-    <link rel="apple-touch-icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --bg: #0f111a;
             --card: #1a1d29;
-            --pink: #ff2d55;
+            --pink: #ee6f1a;
             --input: #252936;
+            --text: #ffffff;
         }
 
         body {
             background: var(--bg);
-            color: white;
-            font-family: sans-serif;
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            padding-bottom: 80px;
         }
 
-        /* Dashboard */
+        .melhor {
+            color: #ffffff;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular';
+            
+        }
+
+        strong {
+            color: #f0c893;
+        }
+
         .dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
         .card {
             background: var(--card);
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 12px;
             border-left: 4px solid var(--pink);
         }
 
-        .card span {
-            color: #a0a0a0;
-            font-size: 0.8rem;
-        }
+        .card h3 { font-size: 13px; opacity: 0.7; margin: 0; text-transform: uppercase; }
+        .card p { font-size: 22px; font-weight: bold; margin: 5px 0 0; }
+        .total-caixa { color: #4caf50; }
 
-        .card strong {
-            font-size: 1.2rem;
-            display: block;
-            margin-top: 5px;
-        }
-
-        .pink {
-            color: var(--pink);
-        }
-
-        /* Tabs */
         .tabs {
             display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
+            gap: 20px;
             border-bottom: 1px solid #333;
+            margin-bottom: 20px;
         }
 
-        .tab-btn {
-            background: none;
-            border: none;
-            color: #a0a0a0;
-            padding: 10px;
+
+        .tab {
+            padding: 10px 5px;
             cursor: pointer;
-            font-size: 1rem;
+            opacity: 0.5;
+            transition: 0.3s;
         }
 
-        .tab-btn.active {
-            color: var(--pink);
+        .tab.active {
+            opacity: 1;
             border-bottom: 2px solid var(--pink);
         }
 
-        /* Form e Conteúdo */
-        .tab-content {
-            display: none;
+        .grid-campos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
 
-        .tab-content.active {
-            display: block;
-        }
-
-        .form-container {
-            background: var(--card);
-            padding: 20px;
-            border-radius: 15px;
-        }
-
-        input,
-        select {
+        input, select, button {
             width: 100%;
             padding: 12px;
-            background: var(--input);
-            border: 1px solid #333;
+            margin-bottom: 15px;
             border-radius: 8px;
-            color: white;
-            margin: 8px 0;
-            box-sizing: border-box;
-        }
-
-        .btn-confirmar {
-            width: 100%;
-            padding: 15px;
-            background: var(--pink);
             border: none;
-            border-radius: 10px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
         }
 
-        /* Itens de Saída */
-        .veiculo-item {
-            background: var(--input);
+        input, select { background: var(--input); color: white; border: 1px solid #333; }
+        button { background: var(--pink); color: white; font-weight: bold; cursor: pointer; transition: filter 0.2s; }
+        button:hover { filter: brightness(1.2); }
+
+        .veiculo-card {
+            background: var(--card);
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #444;
+            border: 1px solid #2d3244;
         }
 
-        /* Botões de Relatório */
-        .relatorio-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .btn-rel {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background: #333;
-            color: white;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-
-        .btn-rel:hover {
-            background: var(--pink);
-        }
-
-        /* ÍCONE FLUTUANTE (GITHUB PAGES) */
-        .floating-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background-color: var(--pink);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            text-decoration: none;
-            z-index: 1000;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
+        .btn-saida { width: auto; margin: 0; padding: 8px 15px; background: #4caf50; }
     </style>
 </head>
-
 <body>
 
-    <h2>🚗 Gestão de Estacionamento</h2>
+    <h2 class="melhor"><i class="fas fa-car-side"></i> <i>Melhor</i><strong> <i>de</i></strong> <i>Estacionar</i></h2>
 
     <div class="dashboard">
-        <div class="card"><span>Vagas Livres</span><strong id="vagas-disponiveis">50</strong></div>
-        <div class="card"><span>Ocupadas</span><strong id="vagas-ocupadas" class="pink">0</strong></div>
-        <div class="card"><span>Total Caixa</span><strong id="faturamento" class="pink">R$ 0.00</strong></div>
+        <div class="card"><h3>Vagas Livres</h3><p id="vagas">50</p></div>
+        <div class="card"><h3>Ocupadas</h3><p id="ocupadas">0</p></div>
+        <div class="card"><h3>Total Caixa</h3><p class="total-caixa" id="caixa">R$ 0.00</p></div>
     </div>
 
-    <nav class="tabs">
-        <button class="tab-btn active" onclick="openTab('tab-entrada', this)">Entrada</button>
-        <button class="tab-btn" onclick="openTab('tab-saida', this)">Pátio</button>
-        <button class="tab-btn" onclick="openTab('tab-relatorios', this)">Relatórios</button>
-    </nav>
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('entrada', event)">Entrada</div>
+        <div class="tab" onclick="showTab('patio', event)">Pátio</div>
+        <div class="tab" onclick="showTab('relatorios', event)">Relatórios</div>
+    </div>
 
-    <div id="tab-entrada" class="tab-content active">
-        <div class="form-container">
-            <h3>Novo Registro</h3>
-            <form id="formEntrada">
-                <input type="text" id="nome" placeholder="Nome do Condutor" required>
-                <input type="text" id="whatsapp" placeholder="WhatsApp (Opcional)">
-                <input type="email" id="email" placeholder="E-mail (Opcional)">
-                <select id="tipo">
-                    <option value="1.50">Moto (R$ 1.50)</option>
-                    <option value="3.00">Carro (R$ 3.00)</option>
-                    <option value="5.00">Caminhonete/SUV (R$ 5.00)</option>
-                </select>
-                <input type="text" id="placa" placeholder="Placa (Ex: ABC1234)" required>
-                <input type="time" id="horaEntrada" required>
-                <button type="submit" class="btn-confirmar">Confirmar Entrada</button>
-            </form>
+    <div id="tab-entrada">
+        <input type="text" id="placa" placeholder="Placa (Obrigatório)" minlength="7" maxlength="8" style="text-transform: uppercase;">
+        <input type="text" id="nome" placeholder="Nome do Cliente (Opcional)">
+        
+        <div class="grid-campos">
+            <input type="text" id="marca" placeholder="Marca (Opcional)">
+            <input type="text" id="cor" placeholder="Cor (Opcional)">
         </div>
+
+        <input type="email" id="email" placeholder="E-mail (Opcional)">
+        <input type="tel" id="whatsapp" placeholder="WhatsApp (Somente números)">
+        
+        <select id="tipo">
+            <option value="1.50">Moto (R$ 1.50/hora)</option>
+            <option value="3.00">Carro (R$ 3.00/hora)</option>
+            <option value="5.00">SUV / Caminhonete (R$ 5.00/hora)</option>
+        </select>
+        <button onclick="adicionarVeiculo()"><i>Registrar Entrada</i></button>
     </div>
 
-    <div id="tab-saida" class="tab-content">
+    <div id="tab-patio" style="display:none;">
         <div id="lista-patio"></div>
     </div>
 
-    <div id="tab-relatorios" class="tab-content">
-        <div class="form-container">
-            <h3>Exportar Relatórios (Excel)</h3>
-            <div class="relatorio-actions">
-                <button class="btn-rel" onclick="exportarExcel('diario')">Diário</button>
-                <button class="btn-rel" onclick="exportarExcel('semanal')">Semanal</button>
-                <button class="btn-rel" onclick="exportarExcel('mensal')">Mensal</button>
-            </div>
-            <div id="res-relatorio">Selecione o período acima para baixar o arquivo .csv</div>
-        </div>
+    <div id="tab-relatorios" style="display:none;">
+        <button onclick="exportarExcel('diario')">Baixar Relatório Diário</button>
+        <button onclick="exportarExcel('geral')">Baixar Histórico Completo</button>
+        <button onclick="limparCaixa()" style="background: #333; margin-top: 20px;">Zerar Apenas Valor em Caixa</button>
     </div>
-
-    <a href="https://devmarcelomacedo.github.io/EstacionemelhorPreco/" class="floating-btn" id="link-projeto">
-        <i class="fas fa-qrcode"></i>
-    </a>
 
     <script>
         let patio = JSON.parse(localStorage.getItem('patio')) || [];
         let historico = JSON.parse(localStorage.getItem('historico')) || [];
         let faturamento = parseFloat(localStorage.getItem('faturamento')) || 0;
-
-        // Hora atual automática
-        document.getElementById('horaEntrada').value = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        const TOTAL_VAGAS = 50;
 
         function salvar() {
             localStorage.setItem('patio', JSON.stringify(patio));
             localStorage.setItem('historico', JSON.stringify(historico));
-            localStorage.setItem('faturamento', faturamento.toString());
-            atualizarPainel();
+            localStorage.setItem('faturamento', faturamento.toFixed(2));
         }
 
-        function openTab(id, btn) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            btn.classList.add('active');
-            if (id === 'tab-saida') renderPatio();
+        function showTab(tab, event) {
+            document.getElementById('tab-entrada').style.display = tab === 'entrada' ? 'block' : 'none';
+            document.getElementById('tab-patio').style.display = tab === 'patio' ? 'block' : 'none';
+            document.getElementById('tab-relatorios').style.display = tab === 'relatorios' ? 'block' : 'none';
+            
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            if(tab === 'patio') renderPatio();
         }
 
-        document.getElementById('formEntrada').onsubmit = function (e) {
-            e.preventDefault();
+        function adicionarVeiculo() {
+            const placa = document.getElementById('placa').value.toUpperCase();
+            const nome = document.getElementById('nome').value || "Não informado";
+            const marca = document.getElementById('marca').value || "N/A";
+            const cor = document.getElementById('cor').value || "N/A";
+            const email = document.getElementById('email').value || "N/A";
+            const whatsapp = document.getElementById('whatsapp').value;
+            const tipoSelect = document.getElementById('tipo');
+            const valorHora = parseFloat(tipoSelect.value);
+            const tipoNome = tipoSelect.options[tipoSelect.selectedIndex].text.split(' (')[0];
+
+            if (placa.length < 7) return alert("Placa inválida!");
+            if (patio.length >= TOTAL_VAGAS) return alert("Estacionamento lotado!");
+
             const veiculo = {
-                id: Date.now(),
-                nome: document.getElementById('nome').value,
-                whatsapp: document.getElementById('whatsapp').value || "Não informado",
-                email: document.getElementById('email').value || "Não informado",
-                tipo: document.getElementById('tipo').options[document.getElementById('tipo').selectedIndex].text,
-                valor: parseFloat(document.getElementById('tipo').value),
-                placa: document.getElementById('placa').value.toUpperCase(),
-                entrada: document.getElementById('horaEntrada').value,
-                data: new Date().toLocaleDateString('pt-BR')
+                placa, nome, marca, cor, email, whatsapp, valorHora, tipoNome,
+                entrada: new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
+                data: new Date().toLocaleDateString('pt-BR'),
+                timestampEntrada: new Date().getTime()
             };
+
             patio.push(veiculo);
             salvar();
-            this.reset();
-            alert("Veículo Registrado!");
-        };
-
-        function atualizarPainel() {
-            document.getElementById('vagas-ocupadas').innerText = patio.length;
-            document.getElementById('vagas-disponiveis').innerText = 50 - patio.length;
-            document.getElementById('faturamento').innerText = `R$ ${faturamento.toFixed(2)}`;
-        }
-
-        function renderPatio() {
-            const lista = document.getElementById('lista-patio');
-            lista.innerHTML = patio.length === 0 ? "<p>Pátio Vazio</p>" : "";
-            patio.forEach((v, index) => {
-                const item = document.createElement('div');
-                item.className = 'veiculo-item';
-                item.innerHTML = `
-                    <div><strong>${v.placa}</strong><br><small>${v.tipo} - ${v.entrada}</small></div>
-                    <button onclick="darSaida(${index})" class="btn-confirmar" style="width:80px; margin:0; padding:10px">Saída</button>
-                `;
-                lista.appendChild(item);
-            });
+            alert("Entrada registrada!");
+            limparCampos();
+            renderDashboard();
         }
 
         function darSaida(index) {
             const v = patio[index];
-            v.saida = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-            faturamento += v.valor;
-            historico.push(v);
+            const agora = new Date();
+            const diffHoras = Math.max(1, (agora.getTime() - v.timestampEntrada) / (1000 * 60 * 60));
+            const valorFinal = parseFloat((v.valorHora * diffHoras).toFixed(2));
+            
+            v.saida = agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+            v.valorFinal = valorFinal;
+            
+            faturamento += valorFinal;
+            historico.push({...v});
             patio.splice(index, 1);
+            
             salvar();
             renderPatio();
+            renderDashboard();
 
-            // Envio Opcional WhatsApp (Link de comprovante)
-            if (v.whatsapp !== "Não informado") {
-                const msg = `COMPROVANTE: Placa ${v.placa}, Entrada ${v.entrada}, Saída ${v.saida}. Valor: R$ ${v.valor.toFixed(2)}`;
-                window.open(`https://api.whatsapp.com/send?phone=55${v.whatsapp}&text=${encodeURIComponent(msg)}`);
+            if (v.whatsapp) {
+                const msg = `*RECIBO ${v.tipoNome}*%0A*Placa:* ${v.placa}%0A*Entrada:* ${v.entrada}%0A*Saída:* ${v.saida}%0A*Total:* R$ ${valorFinal.toFixed(2)}`;
+                window.open(`https://api.whatsapp.com/send?phone=55${v.whatsapp}&text=${msg}`);
             }
         }
 
-        function exportarExcel(periodo) {
-            if (historico.length === 0) return alert("Nenhum dado para exportar!");
+        function renderPatio() {
+            const lista = document.getElementById('lista-patio');
+            if(patio.length === 0) {
+                lista.innerHTML = '<p style="text-align:center; opacity:0.5;">Pátio vazio</p>';
+                return;
+            }
+            lista.innerHTML = patio.map((v, i) => `
+                <div class="veiculo-card">
+                    <div>
+                        <strong>${v.placa}</strong> - <span style="font-size: 0.9em; opacity: 0.8">${v.marca} (${v.cor})</span><br>
+                        <small>${v.tipoNome} - Entrada: ${v.entrada}</small>
+                    </div>
+                    <button class="btn-saida" onclick="darSaida(${i})">Sair</button>
+                </div>
+            `).join('');
+        }
 
-            let csv = "Data,Nome,Placa,Tipo,Entrada,Saida,Valor\n";
-            historico.forEach(v => {
-                csv += `${v.data},${v.nome},${v.placa},${v.tipo},${v.entrada},${v.saida},${v.valor}\n`;
+        function renderDashboard() {
+            document.getElementById('vagas').innerText = TOTAL_VAGAS - patio.length;
+            document.getElementById('ocupadas').innerText = patio.length;
+            document.getElementById('caixa').innerText = `R$ ${faturamento.toFixed(2)}`;
+        }
+
+        function exportarExcel(tipo) {
+            let dados = tipo === 'diario' 
+                ? historico.filter(v => v.data === new Date().toLocaleDateString('pt-BR'))
+                : historico;
+
+            if (dados.length === 0) return alert("Nenhum dado para exportar!");
+
+            let csv = "\ufeffData,Placa,Marca,Cor,Nome,Email,Tipo,Entrada,Saida,Valor\n";
+            dados.forEach(v => {
+                csv += `${v.data},${v.placa},${v.marca},${v.cor},${v.nome},${v.email},${v.tipoNome},${v.entrada},${v.saida},R$ ${v.valorFinal}\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", `relatorio_${periodo}_estacionamento.csv`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
+            link.href = URL.createObjectURL(blob);
+            link.download = `relatorio_${tipo}_${new Date().toLocaleDateString('pt-BR').replace(/\//g, '-')}.csv`;
             link.click();
-            document.body.removeChild(link);
         }
 
-        atualizarPainel();
+        function limparCampos() {
+            document.querySelectorAll('#tab-entrada input').forEach(i => i.value = '');
+        }
+
+        function limparCaixa() {
+            if(confirm("Deseja zerar apenas o Total em Caixa? O histórico de relatórios e veículos no pátio serão mantidos.")) {
+                faturamento = 0;
+                salvar();
+                renderDashboard();
+                alert("Caixa zerado com sucesso!");
+            }
+        }
+
+        renderDashboard();
     </script>
 </body>
-
 </html>
