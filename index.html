@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Melhor De Estacionar</title>
+    <title>Melhor De Estacionar Pro - Com Tolerância</title>
     <link rel="icon" type="image/png" href="img/favicon.png">
-<link rel="apple-touch-icon" href="img/favicon.png">
+    <link rel="apple-touch-icon" href="img/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --bg: #0f111a;
             --card: #1a1d29;
-            --pink: #ee6f1a;
+            --orange: #ee6f1a;
             --input: #252936;
             --text: #ffffff;
+            --success: #4caf50;
+            --blue: #0984e3;
         }
 
         body {
@@ -26,8 +29,8 @@
 
         .melhor {
             color: #ffffff;
-            font-family: 'Lucida Sans', 'Lucida Sans Regular';
-            
+            font-family: 'Lucida Sans', sans-serif;
+            margin-bottom: 25px;
         }
 
         strong {
@@ -45,31 +48,45 @@
             background: var(--card);
             padding: 15px;
             border-radius: 12px;
-            border-left: 4px solid var(--pink);
+            border-left: 4px solid var(--orange);
         }
 
-        .card h3 { font-size: 13px; opacity: 0.7; margin: 0; text-transform: uppercase; }
-        .card p { font-size: 22px; font-weight: bold; margin: 5px 0 0; }
-        .total-caixa { color: #4caf50; }
+        .card h3 {
+            font-size: 11px;
+            opacity: 0.7;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .card p {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 5px 0 0;
+        }
+
+        .total-caixa {
+            color: var(--success);
+        }
 
         .tabs {
             display: flex;
             gap: 20px;
             border-bottom: 1px solid #333;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
-
         .tab {
-            padding: 10px 5px;
+            padding: 10px 15px;
             cursor: pointer;
             opacity: 0.5;
             transition: 0.3s;
+            font-weight: bold;
         }
 
         .tab.active {
             opacity: 1;
-            border-bottom: 2px solid var(--pink);
+            border-bottom: 3px solid var(--orange);
+            color: var(--orange);
         }
 
         .grid-campos {
@@ -78,9 +95,11 @@
             gap: 10px;
         }
 
-        input, select, button {
+        input,
+        select,
+        button {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             margin-bottom: 15px;
             border-radius: 8px;
             border: none;
@@ -88,32 +107,101 @@
             font-size: 16px;
         }
 
-        input, select { background: var(--input); color: white; border: 1px solid #333; }
-        button { background: var(--pink); color: white; font-weight: bold; cursor: pointer; transition: filter 0.2s; }
-        button:hover { filter: brightness(1.2); }
+        input,
+        select {
+            background: var(--input);
+            color: white;
+            border: 1px solid #333;
+        }
+
+        button {
+            background: var(--orange);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            filter: brightness(1.2);
+        }
 
         .veiculo-card {
             background: var(--card);
-            padding: 15px;
+            padding: 18px;
             border-radius: 12px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 1px solid #2d3244;
         }
 
-        .btn-saida { width: auto; margin: 0; padding: 8px 15px; background: #4caf50; }
+        .btn-saida {
+            width: auto;
+            margin: 0;
+            padding: 10px 25px;
+            background: var(--success);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .resumo-venda {
+            background: #2d3244;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .badge-tolerancia {
+            background: #d63031;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
     </style>
 </head>
+
 <body>
 
     <h2 class="melhor"><i class="fas fa-car-side"></i> <i>Melhor</i><strong> <i>de</i></strong> <i>Estacionar</i></h2>
 
     <div class="dashboard">
-        <div class="card"><h3>Vagas Livres</h3><p id="vagas">50</p></div>
-        <div class="card"><h3>Ocupadas</h3><p id="ocupadas">0</p></div>
-        <div class="card"><h3>Total Caixa</h3><p class="total-caixa" id="caixa">R$ 0.00</p></div>
+        <div class="card">
+            <h3>Vagas Livres</h3>
+            <p id="vagas">50</p>
+        </div>
+        <div class="card">
+            <h3>Ocupadas</h3>
+            <p id="ocupadas">0</p>
+        </div>
+        <div class="card">
+            <h3>Caixa Hoje</h3>
+            <p class="total-caixa" id="caixa">R$ 0,00</p>
+        </div>
     </div>
 
     <div class="tabs">
@@ -123,23 +211,25 @@
     </div>
 
     <div id="tab-entrada">
-        <input type="text" id="placa" placeholder="Placa (Obrigatório)" minlength="7" maxlength="8" style="text-transform: uppercase;">
+        <input type="text" id="placa" placeholder="Placa" minlength="7" maxlength="8"
+            style="text-transform: uppercase; font-weight: bold;">
         <input type="text" id="nome" placeholder="Nome do Cliente (Opcional)">
-        
+
         <div class="grid-campos">
-            <input type="text" id="marca" placeholder="Marca (Opcional)">
-            <input type="text" id="cor" placeholder="Cor (Opcional)">
+            <input type="text" id="marca" placeholder="Marca">
+            <input type="text" id="cor" placeholder="Cor">
         </div>
 
-        <input type="email" id="email" placeholder="E-mail (Opcional)">
-        <input type="tel" id="whatsapp" placeholder="WhatsApp (Somente números)">
-        
+        <input type="email" id="email" placeholder="E-mail Opcional">
+        <input type="tel" id="whatsapp" placeholder="WhatsApp">
+
+        <label style="font-size: 11px; opacity: 0.6;">Tipo (15 min de tolerância grátis):</label>
         <select id="tipo">
-            <option value="1.50">Moto (R$ 1.50/hora)</option>
-            <option value="3.00">Carro (R$ 3.00/hora)</option>
-            <option value="5.00">SUV / Caminhonete (R$ 5.00/hora)</option>
+            <option value="1.50">Moto (R$ 1,50/hora)</option>
+            <option value="3.00">Carro (R$ 3,00/hora)</option>
+            <option value="5.00">SUV / Caminhonete (R$ 5,00/hora)</option>
         </select>
-        <button onclick="adicionarVeiculo()"><i>Registrar Entrada</i></button>
+        <button onclick="adicionarVeiculo()"><i class="fas fa-plus-circle"></i> REGISTRAR ENTRADA</button>
     </div>
 
     <div id="tab-patio" style="display:none;">
@@ -147,16 +237,44 @@
     </div>
 
     <div id="tab-relatorios" style="display:none;">
+        <div style="background: var(--card); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+            <p id="detalhe-caixa"></p>
+        </div>
         <button onclick="exportarExcel('diario')">Baixar Relatório Diário</button>
-        <button onclick="exportarExcel('geral')">Baixar Histórico Completo</button>
-        <button onclick="limparCaixa()" style="background: #333; margin-top: 20px;">Zerar Apenas Valor em Caixa</button>
+        <button onclick="exportarExcel('geral')" style="background: #2d3244;">Histórico Completo</button>
+    </div>
+
+    <div id="modal-pagamento" class="modal">
+        <div class="modal-content">
+            <h3 id="modal-titulo">Finalizar Saída</h3>
+            <div class="resumo-venda">
+                <p id="modal-placa" style="color:var(--orange); font-weight:bold;"></p>
+                <p id="modal-tempo" style="font-size: 14px; opacity: 0.8;"></p>
+                <p id="modal-valor" style="font-size: 28px; color:var(--success); font-weight: bold;"></p>
+            </div>
+
+            <div id="secao-pagamento">
+                <label style="display:block; text-align:left; font-size:12px;">Forma de Pagamento:</label>
+                <select id="forma-pagamento">
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="PIX">PIX</option>
+                    <option value="Débito">Débito</option>
+                    <option value="Crédito">Crédito</option>
+                    <option value="Grátis/Tolerância">Grátis/Tolerância</option>
+                </select>
+                <button onclick="confirmarSaida()">CONCLUIR</button>
+            </div>
+            <button onclick="fecharModal()" style="background:transparent; color:#999;">Cancelar</button>
+        </div>
     </div>
 
     <script>
         let patio = JSON.parse(localStorage.getItem('patio')) || [];
         let historico = JSON.parse(localStorage.getItem('historico')) || [];
         let faturamento = parseFloat(localStorage.getItem('faturamento')) || 0;
+        let veiculoSaindoIndex = null;
         const TOTAL_VAGAS = 50;
+        const TOLERANCIA_MINUTOS = 15;
 
         function salvar() {
             localStorage.setItem('patio', JSON.stringify(patio));
@@ -165,81 +283,134 @@
         }
 
         function showTab(tab, event) {
-            document.getElementById('tab-entrada').style.display = tab === 'entrada' ? 'block' : 'none';
-            document.getElementById('tab-patio').style.display = tab === 'patio' ? 'block' : 'none';
-            document.getElementById('tab-relatorios').style.display = tab === 'relatorios' ? 'block' : 'none';
-            
+            document.querySelectorAll('[id^="tab-"]').forEach(d => d.style.display = 'none');
+            document.getElementById('tab-' + tab).style.display = 'block';
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.currentTarget.classList.add('active');
-            if(tab === 'patio') renderPatio();
+            if (tab === 'patio') renderPatio();
+            if (tab === 'relatorios') atualizarRelatorios();
         }
 
         function adicionarVeiculo() {
             const placa = document.getElementById('placa').value.toUpperCase();
-            const nome = document.getElementById('nome').value || "Não informado";
-            const marca = document.getElementById('marca').value || "N/A";
-            const cor = document.getElementById('cor').value || "N/A";
-            const email = document.getElementById('email').value || "N/A";
-            const whatsapp = document.getElementById('whatsapp').value;
-            const tipoSelect = document.getElementById('tipo');
-            const valorHora = parseFloat(tipoSelect.value);
-            const tipoNome = tipoSelect.options[tipoSelect.selectedIndex].text.split(' (')[0];
-
             if (placa.length < 7) return alert("Placa inválida!");
-            if (patio.length >= TOTAL_VAGAS) return alert("Estacionamento lotado!");
 
+            const tipoSelect = document.getElementById('tipo');
             const veiculo = {
-                placa, nome, marca, cor, email, whatsapp, valorHora, tipoNome,
-                entrada: new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
+                placa,
+                nome: document.getElementById('nome').value || "N/A",
+                marca: document.getElementById('marca').value || "N/A",
+                cor: document.getElementById('cor').value || "N/A",
+                email: document.getElementById('email').value || "N/A",
+                whatsapp: document.getElementById('whatsapp').value || "",
+                valorHora: parseFloat(tipoSelect.value),
+                tipoNome: tipoSelect.options[tipoSelect.selectedIndex].text.split(' (')[0],
+                entrada: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
                 data: new Date().toLocaleDateString('pt-BR'),
                 timestampEntrada: new Date().getTime()
             };
 
             patio.push(veiculo);
             salvar();
-            alert("Entrada registrada!");
+            alert("Entrada Registrada!");
             limparCampos();
             renderDashboard();
         }
 
-        function darSaida(index) {
+        function abrirModalSaida(index) {
+            veiculoSaindoIndex = index;
             const v = patio[index];
             const agora = new Date();
-            const diffHoras = Math.max(1, (agora.getTime() - v.timestampEntrada) / (1000 * 60 * 60));
-            const valorFinal = parseFloat((v.valorHora * diffHoras).toFixed(2));
-            
-            v.saida = agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+            const diffMs = agora.getTime() - v.timestampEntrada;
+            const diffMinutos = Math.floor(diffMs / (1000 * 60));
+
+            let valor = 0;
+            let tempoTxt = `${diffMinutos} min`;
+
+            if (diffMinutos > TOLERANCIA_MINUTOS) {
+                // Se passou da tolerância, cobra a hora cheia arredondada para cima
+                const horasCobradas = Math.ceil(diffMinutos / 60);
+                valor = (v.valorHora * horasCobradas).toFixed(2);
+                document.getElementById('forma-pagamento').value = "Dinheiro";
+            } else {
+                valor = "0.00";
+                tempoTxt += " (Dentro da Tolerância)";
+                document.getElementById('forma-pagamento').value = "Grátis/Tolerância";
+            }
+
+            document.getElementById('modal-placa').innerText = v.placa;
+            document.getElementById('modal-tempo').innerText = `Permanência: ${tempoTxt}`;
+            document.getElementById('modal-valor').innerText = `R$ ${valor}`;
+            document.getElementById('modal-pagamento').style.display = 'flex';
+        }
+
+        function confirmarSaida() {
+            const v = patio[veiculoSaindoIndex];
+            const agora = new Date();
+            const valorFinal = parseFloat(document.getElementById('modal-valor').innerText.replace('R$ ', ''));
+            const forma = document.getElementById('forma-pagamento').value;
+
+            v.saida = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
             v.valorFinal = valorFinal;
-            
+            v.formaPagamento = forma;
+
             faturamento += valorFinal;
-            historico.push({...v});
-            patio.splice(index, 1);
-            
+            historico.push({ ...v });
+            patio.splice(veiculoSaindoIndex, 1);
+
             salvar();
-            renderPatio();
+            fecharModal();
             renderDashboard();
+            renderPatio();
 
             if (v.whatsapp) {
-                const msg = `*RECIBO ${v.tipoNome}*%0A*Placa:* ${v.placa}%0A*Entrada:* ${v.entrada}%0A*Saída:* ${v.saida}%0A*Total:* R$ ${valorFinal.toFixed(2)}`;
-                window.open(`https://api.whatsapp.com/send?phone=55${v.whatsapp}&text=${msg}`);
+                const link = `https://api.whatsapp.com/send?phone=55${v.whatsapp}&text=*COMPROVANTE*%0A*Placa:* ${v.placa}%0A*Valor:* R$ ${valorFinal.toFixed(2)}%0A*Pagamento:* ${forma}`;
+                window.open(link);
             }
         }
 
         function renderPatio() {
             const lista = document.getElementById('lista-patio');
-            if(patio.length === 0) {
-                lista.innerHTML = '<p style="text-align:center; opacity:0.5;">Pátio vazio</p>';
-                return;
-            }
-            lista.innerHTML = patio.map((v, i) => `
+            lista.innerHTML = patio.map((v, i) => {
+                const diffMin = Math.floor((new Date().getTime() - v.timestampEntrada) / (1000 * 60));
+                const status = diffMin <= TOLERANCIA_MINUTOS ? '<span class="badge-tolerancia">Tolerância</span>' : '';
+                return `
                 <div class="veiculo-card">
                     <div>
-                        <strong>${v.placa}</strong> - <span style="font-size: 0.9em; opacity: 0.8">${v.marca} (${v.cor})</span><br>
-                        <small>${v.tipoNome} - Entrada: ${v.entrada}</small>
+                        <strong>${v.placa}</strong> ${status}<br>
+                        <small>${v.marca} | Entrada: ${v.entrada}</small>
                     </div>
-                    <button class="btn-saida" onclick="darSaida(${i})">Sair</button>
+                    <button class="btn-saida" onclick="abrirModalSaida(${i})">SAÍDA</button>
                 </div>
-            `).join('');
+            `}).join('');
+        }
+
+        function exportarExcel(tipo) {
+            const hoje = new Date().toLocaleDateString('pt-BR');
+            let dados = tipo === 'diario' ? historico.filter(v => v.data === hoje) : historico;
+            let csv = "\ufeffData,Placa,Marca,Cor,Nome,Email,Tipo,Entrada,Saida,Metodo,Valor\n";
+            let total = 0;
+            dados.forEach(v => {
+                total += v.valorFinal;
+                csv += `${v.data},${v.placa},${v.marca},${v.cor},${v.nome},${v.email},${v.tipoNome},${v.entrada},${v.saida},${v.formaPagamento},"R$ ${v.valorFinal.toFixed(2)}"\n`;
+            });
+            csv += `\n,,,,,,,,,,TOTAL:,"R$ ${total.toFixed(2)}"\n`;
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+            link.download = `relatorio_${tipo}.csv`;
+            link.click();
+        }
+
+        function atualizarRelatorios() {
+            const hoje = new Date().toLocaleDateString('pt-BR');
+            const dadosHoje = historico.filter(v => v.data === hoje);
+            const totais = dadosHoje.reduce((acc, v) => {
+                acc[v.formaPagamento] = (acc[v.formaPagamento] || 0) + v.valorFinal;
+                return acc;
+            }, {});
+            let html = `Atendimentos Hoje: <strong>${dadosHoje.length}</strong><br><br>`;
+            for (let f in totais) html += `${f}: <strong>R$ ${totais[f].toFixed(2)}</strong><br>`;
+            document.getElementById('detalhe-caixa').innerHTML = html;
         }
 
         function renderDashboard() {
@@ -248,39 +419,11 @@
             document.getElementById('caixa').innerText = `R$ ${faturamento.toFixed(2)}`;
         }
 
-        function exportarExcel(tipo) {
-            let dados = tipo === 'diario' 
-                ? historico.filter(v => v.data === new Date().toLocaleDateString('pt-BR'))
-                : historico;
-
-            if (dados.length === 0) return alert("Nenhum dado para exportar!");
-
-            let csv = "\ufeffData,Placa,Marca,Cor,Nome,Email,Tipo,Entrada,Saida,Valor\n";
-            dados.forEach(v => {
-                csv += `${v.data},${v.placa},${v.marca},${v.cor},${v.nome},${v.email},${v.tipoNome},${v.entrada},${v.saida},R$ ${v.valorFinal}\n`;
-            });
-
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `relatorio_${tipo}_${new Date().toLocaleDateString('pt-BR').replace(/\//g, '-')}.csv`;
-            link.click();
-        }
-
-        function limparCampos() {
-            document.querySelectorAll('#tab-entrada input').forEach(i => i.value = '');
-        }
-
-        function limparCaixa() {
-            if(confirm("Deseja zerar apenas o Total em Caixa? O histórico de relatórios e veículos no pátio serão mantidos.")) {
-                faturamento = 0;
-                salvar();
-                renderDashboard();
-                alert("Caixa zerado com sucesso!");
-            }
-        }
+        function fecharModal() { document.getElementById('modal-pagamento').style.display = 'none'; }
+        function limparCampos() { document.querySelectorAll('#tab-entrada input').forEach(i => i.value = ''); }
 
         renderDashboard();
     </script>
 </body>
+
 </html>
